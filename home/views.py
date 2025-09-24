@@ -32,10 +32,10 @@ class MenuItemByCategoryView(APIView):
     def get(self,request):
         category_name=request.query_params.get("category",None)
         if not category_name:
-            return Resposne({"error":"category query isrequired"},status=status.HTTP_400_bad_request)
+            return Resposne({"error":"category query is required"},status=status.HTTP_400_bad_request)
             items=MenuItem.objects.filter(category__category_name__iexact=category_name)
 
             if not items.exists():
-                return resposne({"message":f"no menu"},status=status.HTTP_404_not_found)
+                return resposne({"message":f"no menu items found in category '{category_name}'"},status=status.HTTP_404_not_found)
             serializer=MenuItemSerializer(items,many=True)
             return Response(serializer.data,status=status.HTTP_200_ok)    
