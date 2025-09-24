@@ -21,4 +21,9 @@ class MenuItemViewSet(viewsets.viewset):
             page=paginator.paginate_queryset(items,request)
             serializer=MenuItemSerializer(page,many=True)
             paginator.get_paginated_response(serializer.data)    
-
+    def update(self,request,pk=None):
+        item=get_object_or_404(MenItem,pk=pk)
+        serializer=MenuItemSerializer(item,data=request.data)
+        if serializer.is_valid:
+            serializer.save()
+            return Response(serializer.errors,status=status.HTTP_400_bad_request)
